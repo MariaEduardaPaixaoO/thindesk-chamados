@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: thindesk-chamados
+    runtime: docker
+    plan: free
+    healthCheckPath: /login
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DATABASE
+        value: thindesk
+      - key: DEMO_USERNAME
+        value: demo
+      - key: DEMO_PASSWORD
+        value: demo123
+      - key: SEED_DEMO_DATA
+        value: "true"
