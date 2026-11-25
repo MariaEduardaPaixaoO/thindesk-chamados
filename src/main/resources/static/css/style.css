@@ -1,0 +1,119 @@
+/* Estilos adicionais para páginas com sidebar */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background-color: #343a40;
+    color: white;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar a {
+    color: white;
+    text-decoration: none;
+}
+
+#sidebar a:hover {
+    background-color: #495057;
+    color: white;
+}
+
+#sidebar .nav-item .submenu {
+    display: none;
+    padding-left: 1.5rem;
+}
+
+#sidebar .nav-item.open .submenu {
+    display: block;
+}
+
+/* Mantém a sidebar fixa na tela ao rolar o conteúdo */
+@media (min-width: 769px) {
+    aside {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        align-self: flex-start;
+    }
+}
+
+#content {
+    flex-grow: 1;
+    padding: 20px;
+    min-width: 0;
+}
+
+/* Usuário logado e botão de saída no rodapé da sidebar */
+#sidebar .sidebar-rodape {
+    margin-top: auto;
+    padding: 1rem;
+    border-top: 1px solid #495057;
+}
+
+/* Cards de indicadores do dashboard */
+.card-indicador {
+    border: 0;
+    border-left: 4px solid #343a40;
+    transition: transform 0.15s;
+}
+
+.card-indicador:hover {
+    transform: translateY(-2px);
+}
+
+.card-indicador.indicador-aberto {
+    border-left-color: #0d6efd;
+}
+
+.card-indicador.indicador-andamento {
+    border-left-color: #ffc107;
+}
+
+.card-indicador.indicador-concluido {
+    border-left-color: #198754;
+}
+
+.grafico {
+    position: relative;
+    height: 280px;
+}
+
+.texto-multilinha {
+    white-space: pre-line;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+
+    #sidebar.active {
+        left: 0;
+    }
+
+    #content {
+        margin-left: 0;
+        padding-top: 60px;
+    }
+
+    .toggle-btn {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1100;
+        cursor: pointer;
+    }
+}
