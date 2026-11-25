@@ -1,0 +1,76 @@
+<div class="container mt-4" th:fragment="content">
+    <h2 class="mb-4">Editar Chamado</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form th:action="@{/chamados/atualizar/{id}(id=${chamadoId})}" th:object="${chamado}" method="post">
+                <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                    <div th:each="mensagem : ${#fields.globalErrors()}" th:text="${mensagem}"></div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label for="titulo" class="form-label">Título</label>
+                        <input type="text" th:field="*{titulo}" class="form-control" th:errorclass="is-invalid"
+                               required minlength="5" maxlength="100">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:text="${#fields.errors('titulo')[0]}"></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select th:field="*{status}" class="form-select">
+                            <option th:each="s : ${statusEdicao}" th:value="${s}" th:text="${s.descricao}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select th:field="*{tipo}" class="form-select" th:errorclass="is-invalid" required>
+                            <option value="">Selecione</option>
+                            <option th:each="t : ${tipos}" th:value="${t.nome}" th:text="${t.nome}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('tipo')}" th:text="${#fields.errors('tipo')[0]}"></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="usuario" class="form-label">Solicitante</label>
+                        <select th:field="*{usuario}" class="form-select" th:errorclass="is-invalid" required>
+                            <option value="">Selecione</option>
+                            <option th:each="c : ${clientes}" th:value="${c.nome}" th:text="${c.nome} + ' (' + ${c.setor} + ')'"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('usuario')}" th:text="${#fields.errors('usuario')[0]}"></div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="tecnico" class="form-label">Técnico responsável</label>
+                        <select th:field="*{tecnico}" class="form-select" th:errorclass="is-invalid">
+                            <option value="">Sem responsável</option>
+                            <option th:each="t : ${tecnicos}" th:value="${t.nome}" th:text="${t.nome}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('tecnico')}" th:text="${#fields.errors('tecnico')[0]}"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea th:field="*{descricao}" class="form-control" th:errorclass="is-invalid" rows="4"
+                                  required minlength="10" maxlength="2000"></textarea>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('descricao')}" th:text="${#fields.errors('descricao')[0]}"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="solucao" class="form-label">Solução</label>
+                        <textarea th:field="*{solucao}" class="form-control" th:errorclass="is-invalid" rows="3" maxlength="2000"
+                                  placeholder="Obrigatória para concluir o chamado"></textarea>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('solucao')}" th:text="${#fields.errors('solucao')[0]}"></div>
+                        <div class="form-text">Ao atribuir um técnico a um chamado aberto, ele passa para "Em andamento".</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <a th:href="@{/chamados/{id}(id=${chamadoId})}" class="btn btn-outline-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

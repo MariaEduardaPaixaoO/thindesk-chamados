@@ -1,0 +1,56 @@
+<div class="container mt-4" th:fragment="content">
+    <h1 class="mb-4">Técnicos</h1>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-semibold">Cadastrar técnico</div>
+        <div class="card-body">
+            <form th:action="@{/tecnicos/salvar}" th:object="${cadastro}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" th:field="*{nome}" class="form-control" th:errorclass="is-invalid" required maxlength="100">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:text="${#fields.errors('nome')[0]}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="username" class="form-label">Usuário de acesso</label>
+                        <input type="text" th:field="*{username}" class="form-control" th:errorclass="is-invalid"
+                               required minlength="3" maxlength="30">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:text="${#fields.errors('username')[0]}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="senha" class="form-label">Senha</label>
+                        <input type="password" th:field="*{senha}" class="form-control" th:errorclass="is-invalid"
+                               required minlength="6" maxlength="60">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('senha')}" th:text="${#fields.errors('senha')[0]}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirmacaoSenha" class="form-label">Confirmar senha</label>
+                        <input type="password" th:field="*{confirmacaoSenha}" class="form-control" th:errorclass="is-invalid" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmacaoSenha')}" th:text="${#fields.errors('confirmacaoSenha')[0]}"></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Cadastrar técnico</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Usuário</th>
+                <th>Cadastro</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${#lists.isEmpty(tecnicos)}">
+                <td colspan="3" class="text-center text-muted py-4">Nenhum técnico cadastrado.</td>
+            </tr>
+            <tr th:each="tecnico : ${tecnicos}">
+                <td th:text="${tecnico.nome}"></td>
+                <td th:text="${tecnico.username}"></td>
+                <td th:text="${tecnico.dataCadastro != null} ? ${#temporals.format(tecnico.dataCadastro, 'dd/MM/yyyy')} : '—'"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

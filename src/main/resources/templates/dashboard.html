@@ -1,0 +1,193 @@
+<div class="container mt-4" th:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Dashboard</h2>
+        <a th:href="@{/chamados/novo}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo chamado
+        </a>
+    </div>
+
+    <!-- Indicadores -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <a th:href="@{/chamados}" class="text-decoration-none">
+                <div class="card card-indicador shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase">Total de chamados</div>
+                            <div class="fs-2 fw-bold text-dark" th:text="${indicadores.total}">0</div>
+                            <div class="small text-muted" th:text="${indicadores.cancelados} + ' cancelado(s)'"></div>
+                        </div>
+                        <i class="bi bi-headset fs-1 text-secondary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <a th:href="@{/chamados(status='ABERTO')}" class="text-decoration-none">
+                <div class="card card-indicador indicador-aberto shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase">Abertos</div>
+                            <div class="fs-2 fw-bold text-dark" th:text="${indicadores.abertos}">0</div>
+                            <div class="small text-muted">aguardando atendimento</div>
+                        </div>
+                        <i class="bi bi-inbox fs-1 text-primary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <a th:href="@{/chamados(status='EM_ANDAMENTO')}" class="text-decoration-none">
+                <div class="card card-indicador indicador-andamento shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase">Em andamento</div>
+                            <div class="fs-2 fw-bold text-dark" th:text="${indicadores.emAndamento}">0</div>
+                            <div class="small text-muted">com técnico responsável</div>
+                        </div>
+                        <i class="bi bi-tools fs-1 text-warning"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <a th:href="@{/chamados(status='CONCLUIDO')}" class="text-decoration-none">
+                <div class="card card-indicador indicador-concluido shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="text-muted small text-uppercase">Concluídos</div>
+                            <div class="fs-2 fw-bold text-dark" th:text="${indicadores.concluidos}">0</div>
+                            <div class="small text-muted">com solução registrada</div>
+                        </div>
+                        <i class="bi bi-check2-circle fs-1 text-success"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${indicadores.total == 0}" class="alert alert-info">
+        Nenhum chamado registrado ainda. Os gráficos serão exibidos assim que o primeiro chamado for aberto.
+    </div>
+
+    <th:block th:if="${indicadores.total > 0}">
+        <!-- Gráficos -->
+        <div class="row g-3 mb-3">
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white fw-semibold">Chamados por status</div>
+                    <div class="card-body">
+                        <div class="grafico"><canvas id="graficoStatus"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white fw-semibold">Chamados abertos nos últimos 30 dias</div>
+                    <div class="card-body">
+                        <div class="grafico"><canvas id="graficoPeriodo"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white fw-semibold">Chamados por tipo</div>
+                    <div class="card-body">
+                        <div class="grafico"><canvas id="graficoTipo"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white fw-semibold">Chamados por técnico responsável</div>
+                    <div class="card-body">
+                        <div class="grafico"><canvas id="graficoTecnico"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Últimos chamados -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">Últimos chamados</span>
+                <a th:href="@{/chamados}" class="small">Ver todos</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Tipo</th>
+                        <th>Solicitante</th>
+                        <th>Técnico</th>
+                        <th>Status</th>
+                        <th>Abertura</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="chamado : ${indicadores.ultimosChamados}">
+                        <td><a th:href="@{/chamados/{id}(id=${chamado.id})}" th:text="${chamado.titulo}"></a></td>
+                        <td th:text="${chamado.tipo}"></td>
+                        <td th:text="${chamado.usuario}"></td>
+                        <td th:text="${chamado.tecnico} ?: '—'"></td>
+                        <td><span class="badge" th:classappend="'text-bg-' + ${chamado.status?.cor}" th:text="${chamado.status?.descricao}"></span></td>
+                        <td th:text="${#temporals.format(chamado.dataAbertura, 'dd/MM/yyyy HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script th:inline="javascript">
+            const porStatus = /*[[${indicadores.porStatus}]]*/ {};
+            const porTipo = /*[[${indicadores.porTipo}]]*/ {};
+            const porTecnico = /*[[${indicadores.porTecnico}]]*/ {};
+            const diasRotulos = /*[[${indicadores.diasRotulos}]]*/ [];
+            const diasTotais = /*[[${indicadores.diasTotais}]]*/ [];
+
+            // Mesmas cores dos selos de status do Bootstrap
+            const coresStatus = ['#0d6efd', '#ffc107', '#198754', '#6c757d'];
+            const eixoQuantidade = { beginAtZero: true, ticks: { precision: 0 } };
+
+            new Chart(document.getElementById('graficoStatus'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(porStatus),
+                    datasets: [{ data: Object.values(porStatus), backgroundColor: coresStatus }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            new Chart(document.getElementById('graficoPeriodo'), {
+                type: 'bar',
+                data: {
+                    labels: diasRotulos,
+                    datasets: [{ label: 'Chamados abertos', data: diasTotais, backgroundColor: '#0d6efd' }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: eixoQuantidade } }
+            });
+
+            new Chart(document.getElementById('graficoTipo'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(porTipo),
+                    datasets: [{ label: 'Chamados', data: Object.values(porTipo), backgroundColor: '#343a40' }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: eixoQuantidade } }
+            });
+
+            new Chart(document.getElementById('graficoTecnico'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(porTecnico),
+                    datasets: [{ label: 'Chamados', data: Object.values(porTecnico), backgroundColor: '#0d6efd' }]
+                },
+                options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: eixoQuantidade } }
+            });
+        </script>
+    </th:block>
+</div>

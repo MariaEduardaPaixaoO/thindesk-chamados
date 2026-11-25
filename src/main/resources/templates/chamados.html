@@ -1,0 +1,56 @@
+<div class="container mt-4" th:fragment="content">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h2 class="mb-0">Lista de Chamados</h2>
+        <a th:href="@{/chamados/novo}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Novo chamado
+        </a>
+    </div>
+
+    <!-- Filtro por status -->
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <a th:href="@{/chamados}" class="btn btn-sm"
+           th:classappend="${statusSelecionado == null} ? 'btn-dark' : 'btn-outline-dark'">Todos</a>
+        <a th:each="s : ${statusDisponiveis}" th:href="@{/chamados(status=${s})}" class="btn btn-sm"
+           th:classappend="${statusSelecionado == s} ? 'btn-dark' : 'btn-outline-dark'"
+           th:text="${s.descricao}">Status</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Solicitante</th>
+                    <th>Técnico</th>
+                    <th>Status</th>
+                    <th>Abertura</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(chamados)}">
+                    <td colspan="7" class="text-center text-muted py-4">Nenhum chamado encontrado.</td>
+                </tr>
+                <tr th:each="chamado : ${chamados}">
+                    <td><a th:href="@{/chamados/{id}(id=${chamado.id})}" th:text="${chamado.titulo}"></a></td>
+                    <td th:text="${chamado.tipo}"></td>
+                    <td th:text="${chamado.usuario}"></td>
+                    <td th:text="${chamado.tecnico} ?: '—'"></td>
+                    <td><span class="badge" th:classappend="'text-bg-' + ${chamado.status?.cor}" th:text="${chamado.status?.descricao}"></span></td>
+                    <td th:text="${#temporals.format(chamado.dataAbertura, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td class="text-end text-nowrap">
+                        <a th:href="@{/chamados/{id}(id=${chamado.id})}" class="btn btn-outline-secondary btn-sm">Detalhes</a>
+                        <th:block th:unless="${chamado.encerrado}">
+                            <a th:href="@{/chamados/atualizar/{id}(id=${chamado.id})}" class="btn btn-warning btn-sm">Editar</a>
+                            <form th:action="@{/chamados/cancelar/{id}(id=${chamado.id})}" method="post" class="d-inline"
+                                  data-confirm="Deseja cancelar este chamado?">
+                                <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                            </form>
+                        </th:block>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
