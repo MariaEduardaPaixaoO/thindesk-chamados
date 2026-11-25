@@ -1,5 +1,9 @@
 # Thindesk — Controle de Chamados Técnicos
 
+**Link do deploy - Aplicação publicada:** [https://thindesk-chamados-b6b5.onrender.com](https://thindesk-chamados-b6b5.onrender.com)
+
+
+
 Sistema web para registro e acompanhamento de chamados de suporte técnico, desenvolvido a partir do projeto Thindesk apresentado na disciplina **Projeto e Desenvolvimento de Software Corporativo**.
 
 As regras de negócio de chamados (validações, ciclo de status, registro de solução e bloqueio de alteração após o encerramento) foram incorporadas do microsserviço de chamados desenvolvido na prática anterior da disciplina.
@@ -7,13 +11,14 @@ As regras de negócio de chamados (validações, ciclo de status, registro de so
 | | |
 |---|---|
 | **Versão atual** | `1.0.0` |
-| **Aplicação publicada** | _adicionar o link do deploy_ |
+| **Aplicação publicada** | _[adicionar o link do deploy](https://thindesk-chamados-b6b5.onrender.com/)_ |
 | **Usuário de demonstração** | `demo` |
 | **Senha de demonstração** | `demo123` |
 
 Também é possível criar uma conta pela opção **Cadastre-se** na tela de login.
 
-![Dashboard do Thindesk](docs/dashboard.png)
+![Dashboard do Thindesk](docs/dashboard1.jpeg)
+![Dashboard do Thindesk - gráficos e últimos chamados](docs/dashboard2.jpeg)
 
 ## Funcionalidades
 
