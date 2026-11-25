@@ -1,0 +1,39 @@
+<div class="container mt-4" th:fragment="content">
+    <h1 class="mb-4">Tipos de Chamado</h1>
+    <form th:action="@{/tipo-chamado/salvar}" th:object="${tipoChamado}" method="post" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome do tipo</label>
+                <input type="text" th:field="*{nome}" class="form-control" th:errorclass="is-invalid"
+                       required maxlength="60" placeholder="Ex.: Hardware">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:text="${#fields.errors('nome')[0]}"></div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Adicionar</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${#lists.isEmpty(tipos)}">
+                <td colspan="2" class="text-center text-muted py-4">Nenhum tipo cadastrado.</td>
+            </tr>
+            <tr th:each="tipo : ${tipos}">
+                <td th:text="${tipo.nome}"></td>
+                <td class="text-end">
+                    <form th:action="@{/tipo-chamado/deletar/{id}(id=${tipo.id})}" method="post" class="d-inline"
+                          data-confirm="Deseja excluir este tipo de chamado?">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

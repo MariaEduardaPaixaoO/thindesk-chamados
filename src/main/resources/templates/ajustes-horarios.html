@@ -1,0 +1,62 @@
+<div class="container mt-4" th:fragment="content">
+    <h1 class="mb-4">Ajustes de Horários por Setor</h1>
+    <form th:action="@{/ajustes-horarios/salvar}" th:object="${novoHorario}" method="post" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="setor" class="form-label">Setor</label>
+                <input type="text" th:field="*{setor}" class="form-control" th:errorclass="is-invalid" required maxlength="60">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('setor')}" th:text="${#fields.errors('setor')[0]}"></div>
+            </div>
+            <div class="col-md-3">
+                <label for="diaSemana" class="form-label">Dia</label>
+                <select th:field="*{diaSemana}" class="form-select" th:errorclass="is-invalid" required>
+                    <option value="">Selecione</option>
+                    <option th:each="dia : ${diasSemana}" th:value="${dia}" th:text="${dia}"></option>
+                </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('diaSemana')}" th:text="${#fields.errors('diaSemana')[0]}"></div>
+            </div>
+            <div class="col-md-2">
+                <label for="horarioInicio" class="form-label">Início</label>
+                <input type="time" th:field="*{horarioInicio}" class="form-control" th:errorclass="is-invalid" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('horarioInicio')}" th:text="${#fields.errors('horarioInicio')[0]}"></div>
+            </div>
+            <div class="col-md-2">
+                <label for="horarioFim" class="form-label">Fim</label>
+                <input type="time" th:field="*{horarioFim}" class="form-control" th:errorclass="is-invalid" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('horarioFim')}" th:text="${#fields.errors('horarioFim')[0]}"></div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Salvar</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Setor</th>
+                <th>Dia</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${#lists.isEmpty(horarios)}">
+                <td colspan="5" class="text-center text-muted py-4">Nenhum horário cadastrado.</td>
+            </tr>
+            <tr th:each="horario : ${horarios}">
+                <td th:text="${horario?.setor}"></td>
+                <td th:text="${horario?.diaSemana}"></td>
+                <td th:text="${horario?.horarioInicio}"></td>
+                <td th:text="${horario?.horarioFim}"></td>
+                <td class="text-end">
+                    <form th:action="@{/ajustes-horarios/deletar/{id}(id=${horario.id})}" method="post" class="d-inline"
+                          data-confirm="Deseja remover este horário?">
+                        <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
